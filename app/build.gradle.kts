@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
+    id("dagger.hilt.android.plugin")
 }
 
 android {
@@ -66,4 +68,24 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    implementation ("androidx.compose.material:material-icons-extended:1.7.3")
+
+    implementation("androidx.navigation:navigation-compose:2.8.2")
+    implementation ("com.google.code.gson:gson:2.10.1")
+
+    implementation("androidx.lifecycle:lifecycle-viewmodel:2.8.6")
+    implementation("androidx.activity:activity-ktx:1.9.2")
+    implementation("androidx.compose.runtime:runtime-livedata:1.7.3")
+
+    implementation("com.google.dagger:hilt-android:2.48")
+    kapt("com.google.dagger:hilt-android-compiler:2.48")
+
+    implementation("com.squareup.retrofit2:retrofit:2.6.0")
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.squareup.retrofit2:converter-gson:2.5.0")
+
+    implementation ("com.airbnb.android:lottie-compose:6.0.0")
+
+    implementation ("com.github.skydoves:landscapist-glide:1.4.4")
 }
