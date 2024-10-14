@@ -12,10 +12,13 @@ fun Transitions(
 ){
     val navController = rememberNavController()
     // NavHost, hangi ekranın gösterileceğini kontrol eder
-    NavHost(navController = navController, startDestination = "HomeScreen"){
+    NavHost(navController = navController, startDestination = "SplashScreen"){
         // HomeScreen: Ana ekran
         composable("HomeScreen"){
             HomeScreen(homeViewModel, navController)
+        }
+        composable("SplashScreen"){
+            SplashScreen(navController)
         }
 
     }
