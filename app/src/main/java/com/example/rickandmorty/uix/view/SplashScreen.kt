@@ -2,6 +2,7 @@ package com.example.rickandmorty.uix.view
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.material3.MaterialTheme
@@ -12,6 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -22,79 +24,82 @@ import androidx.navigation.NavController
 import com.example.rickandmorty.R
 import kotlinx.coroutines.delay
 
+/**
+ * SplashScreen is the initial screen displayed when the app is launched.
+ * It contains a fading image and an animated title with scaling effect.
+ * After a delay, it automatically navigates to the HomeScreen.
+ *
+ * @param navController NavController used to navigate to the HomeScreen after the splash screen ends.
+ */
 @Composable
 fun SplashScreen(navController: NavController) {
-    // rememberInfiniteTransition is used to create a continuously running animation.
-    // We use this to animate the alpha and scale of the elements.
+    // Infinite animation for the image's alpha (opacity) effect
     val infiniteTransition = rememberInfiniteTransition(label = "")
 
-    // Alpha animation for the image to create a subtle shimmer effect.
-    // The image will continuously transition between 75% and 95% opacity.
+    // Alpha animation, transitioning between 0.75f and 0.95f for a fade in/out effect
     val alphaAnim by infiniteTransition.animateFloat(
-        initialValue = 0.75f, // Initial opacity value (slightly faded)
-        targetValue = 0.95f,  // Final opacity value (almost fully opaque)
+        initialValue = 0.75f,
+        targetValue = 0.95f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1000, easing = LinearEasing), // Linear easing for consistent speed
-            repeatMode = RepeatMode.Reverse // The animation will reverse direction after finishing
+            animation = tween(durationMillis = 1000, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
         ), label = ""
     )
 
-    // Scale animation for the text to create a smooth pulsating effect.
-    // The text will scale between 1.0x (normal size) and 1.05x (slightly enlarged).
+    // Infinite animation for the text's scale effect
     val textScale = rememberInfiniteTransition(label = "")
     val scaleAnim by textScale.animateFloat(
-        initialValue = 1f,   // Normal text size
-        targetValue = 1.05f, // Slightly larger text size
+        initialValue = 1f,
+        targetValue = 1.05f,
         animationSpec = infiniteRepeatable(
-            animation = tween(durationMillis = 1000, easing = FastOutSlowInEasing), // Slow-in, fast-out easing for a smooth pulsation
-            repeatMode = RepeatMode.Reverse // The animation will reverse after reaching the target size
+            animation = tween(durationMillis = 1000, easing = FastOutSlowInEasing),
+            repeatMode = RepeatMode.Reverse
         ), label = ""
     )
 
-    // LaunchedEffect is used to delay navigation to the next screen.
-    // It will trigger once when the composable is first composed.
+    // LaunchedEffect to delay for 5 seconds before navigating to the HomeScreen
     LaunchedEffect(Unit) {
-        delay(5000) // Splash screen will be displayed for 5 seconds.
-
-        // Navigate to the "HomeScreen" after the delay and remove "SplashScreen" from the back stack.
-        // popUpTo("SplashScreen") removes SplashScreen so the user can't navigate back to it.
+        delay(5000)
         navController.navigate("HomeScreen") {
+            // Pop up to SplashScreen, removing it from the backstack to prevent going back to it
             popUpTo("SplashScreen") { inclusive = true }
         }
     }
 
-    // Box serves as a container for laying out children in a vertical and horizontal center alignment.
+    // Box layout to center the content on the screen
     Box(
         modifier = Modifier
-            .fillMaxSize(), // The box takes up the entire screen
-        contentAlignment = Alignment.Center // Aligns children (image and text) in the center of the screen
+            .fillMaxSize()
+            .background(Color(0xFF121212)), // Background color of the splash screen
+        contentAlignment = Alignment.Center
     ) {
+        // Column to organize the image and text vertically
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally, // Centers content horizontally
-            verticalArrangement = Arrangement.Center // Centers content vertically
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
-            // The image is displayed with the alpha animation applied to create a shimmer effect.
+            // Rick and Morty image with fading animation
             Image(
-                painter = painterResource(id = R.drawable.img_rick_and_morty), // Loads the image resource
-                contentDescription = "Rick and Morty", // Content description for accessibility
+                painter = painterResource(id = R.drawable.img_rick_and_morty),
+                contentDescription = "Rick and Morty",
                 modifier = Modifier
-                    .size(350.dp)  // Sets the size of the image
-                    .alpha(alphaAnim), // Applies the alpha (transparency) animation
-                contentScale = ContentScale.Fit // Scales the image to fit within its bounds without clipping
+                    .size(350.dp)
+                    .alpha(alphaAnim), // Alpha animation applied here
+                contentScale = ContentScale.Fit
             )
 
-            Spacer(modifier = Modifier.height(16.dp)) // Adds vertical spacing between the image and text
+            Spacer(modifier = Modifier.height(16.dp)) // Space between image and text
 
-            // The text "Rick and Morty" is displayed with the scale animation applied for a pulsating effect.
+            // Text with scaling animation
             BasicText(
-                text = "Rick and Morty", // The text to be displayed
+                text = "Rick and Morty",
                 modifier = Modifier
-                    .scale(scaleAnim), // Applies the scale animation for the pulsating effect
+                    .scale(scaleAnim), // Scaling animation applied to the text
                 style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.Bold, // Makes the text bold
-                    color = MaterialTheme.colorScheme.onBackground, // Sets the color based on the theme
-                    textAlign = TextAlign.Center, // Centers the text horizontally
-                    fontSize = 28.sp // Sets the font size of the text
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF1F8A70),
+                    textAlign = TextAlign.Center,
+                    fontSize = 28.sp
                 )
             )
         }
