@@ -1,9 +1,11 @@
 package com.example.rickandmorty.uix.view
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.rickandmorty.uix.viewmodel.CharacterDetailViewModel
 import com.example.rickandmorty.uix.viewmodel.EpisodeViewModel
 import com.example.rickandmorty.uix.viewmodel.HomeViewModel
@@ -32,8 +34,15 @@ fun Transitions(
         composable("LocationScreen"){
             LocationScreen(locationViewModel, navController)
         }
-        composable("CharacterDetailScreen"){
-            CharacterDetailScreen(characterDetailViewModel, navController)
+        composable("CharacterDetailScreen/{characterId}",
+            arguments = listOf(
+                navArgument("characterId"){
+                    type = NavType.StringType
+                }
+            )
+        ){
+            val characterId = it.arguments?.getString("characterId")
+            CharacterDetailScreen(characterDetailViewModel, navController, characterId.toString())
         }
 
     }

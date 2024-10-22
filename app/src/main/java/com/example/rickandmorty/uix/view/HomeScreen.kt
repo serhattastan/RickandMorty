@@ -115,7 +115,7 @@ fun HomeScreen(
                     ) {
                         CharacterCard(character = nextCharacter, offsetX = -animatedOffsetX.value * 0.2f, alpha = 0.5f) {}
                         CharacterCard(character = character, offsetX = animatedOffsetX.value, alpha = 1f) {
-                            navController.navigate("characterDetail/${character.id}")
+                            navController.navigate("CharacterDetailScreen/${character.id}")
                         }
                     }
                 }
