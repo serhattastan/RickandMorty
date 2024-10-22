@@ -6,11 +6,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.rickandmorty.uix.viewmodel.EpisodeViewModel
 import com.example.rickandmorty.uix.viewmodel.HomeViewModel
+import com.example.rickandmorty.uix.viewmodel.LocationViewModel
 
 @Composable
 fun Transitions(
     homeViewModel: HomeViewModel,
-    episodeViewModel: EpisodeViewModel
+    episodeViewModel: EpisodeViewModel,
+    locationViewModel: LocationViewModel
 ){
     val navController = rememberNavController()
     // NavHost, hangi ekranın gösterileceğini kontrol eder
@@ -24,6 +26,9 @@ fun Transitions(
         }
         composable("EpisodeScreen"){
             EpisodeScreen(episodeViewModel, navController)
+        }
+        composable("LocationScreen"){
+            LocationScreen(locationViewModel, navController)
         }
 
     }

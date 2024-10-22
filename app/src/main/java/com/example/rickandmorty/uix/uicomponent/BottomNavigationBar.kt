@@ -55,8 +55,8 @@ fun BottomNavigationBar(navController: NavController, currentScreen: String) {
         NavigationBarItem(
             icon = { Icon(Icons.Default.Place, contentDescription = "Locations") }, // Place icon
             label = { Text("Locations") }, // Text label for the navigation item
-            selected = currentScreen == "locations", // Marks this item as selected if the current screen matches
-            onClick = { navController.navigate("locations") }, // Navigates to Locations screen when clicked
+            selected = currentScreen == "LocationScreen", // Marks this item as selected if the current screen matches
+            onClick = { navController.navigate("LocationScreen") }, // Navigates to Locations screen when clicked
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color(0xFF4CAF50), // Green color when selected
                 selectedTextColor = Color(0xFF4CAF50), // Green text when selected
