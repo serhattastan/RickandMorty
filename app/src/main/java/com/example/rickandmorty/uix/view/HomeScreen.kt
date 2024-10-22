@@ -23,6 +23,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.rickandmorty.data.entity.Character
+import com.example.rickandmorty.uix.uicomponent.BottomNavigationBar
 import com.example.rickandmorty.uix.uicomponent.ShimmerEffect
 import com.example.rickandmorty.uix.viewmodel.HomeViewModel
 import com.skydoves.landscapist.glide.GlideImage
@@ -62,7 +63,7 @@ fun HomeScreen(
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF202329))
             )
         },
-        bottomBar = { BottomNavigationBar(navController) } // Bottom navigation bar setup
+        bottomBar = { BottomNavigationBar(navController = navController, currentScreen = "HomeScreen") }
     ) { paddingValues ->
         if (characters.isNotEmpty()) {
             Box(
@@ -193,48 +194,5 @@ fun CharacterAttributeRow(icon: ImageVector, label: String, value: String) {
         Icon(imageVector = icon, contentDescription = "$label Icon", tint = Color(0xFF1F8A70))
         Spacer(modifier = Modifier.width(8.dp))
         Text(text = "$label: $value", style = MaterialTheme.typography.bodyMedium, color = Color(0xFFD1D1D1))
-    }
-}
-
-/**
- * Displays the bottom navigation bar with navigation options for different screens.
- *
- * @param navController The NavController used to navigate between different screens.
- */
-@Composable
-fun BottomNavigationBar(navController: NavController) {
-    NavigationBar(containerColor = Color(0xFF202329)) {
-        // Bottom navigation item for Characters
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Person, contentDescription = "Characters") },
-            label = { Text("Characters") },
-            selected = true,
-            onClick = { navController.navigate("characters") },
-            colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF1F8A70), unselectedIconColor = Color(0xFFB0BEC5))
-        )
-        // Bottom navigation item for Episodes
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Movie, contentDescription = "Episodes") },
-            label = { Text("Episodes") },
-            selected = false,
-            onClick = { navController.navigate("episodes") },
-            colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF1F8A70), unselectedIconColor = Color(0xFFB0BEC5))
-        )
-        // Bottom navigation item for Locations
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Place, contentDescription = "Locations") },
-            label = { Text("Locations") },
-            selected = false,
-            onClick = { navController.navigate("locations") },
-            colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF1F8A70), unselectedIconColor = Color(0xFFB0BEC5))
-        )
-        // Bottom navigation item for Settings
-        NavigationBarItem(
-            icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") },
-            label = { Text("Settings") },
-            selected = false,
-            onClick = { navController.navigate("settings") },
-            colors = NavigationBarItemDefaults.colors(selectedIconColor = Color(0xFF1F8A70), unselectedIconColor = Color(0xFFB0BEC5))
-        )
     }
 }
