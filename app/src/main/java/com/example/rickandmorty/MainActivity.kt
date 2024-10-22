@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.rickandmorty.ui.theme.RickAndMortyTheme
 import com.example.rickandmorty.uix.view.Transitions
+import com.example.rickandmorty.uix.viewmodel.CharacterDetailViewModel
 import com.example.rickandmorty.uix.viewmodel.EpisodeViewModel
 import com.example.rickandmorty.uix.viewmodel.HomeViewModel
 import com.example.rickandmorty.uix.viewmodel.LocationViewModel
@@ -18,13 +19,14 @@ class MainActivity : ComponentActivity() {
     val homeViewModel : HomeViewModel by viewModels()
     val episodeViewModel: EpisodeViewModel by viewModels()
     val locationViewModel: LocationViewModel by viewModels()
+    val characterDetailViewModel: CharacterDetailViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             RickAndMortyTheme {
-                Transitions(homeViewModel, episodeViewModel, locationViewModel)
+                Transitions(homeViewModel, episodeViewModel, locationViewModel, characterDetailViewModel)
             }
         }
     }

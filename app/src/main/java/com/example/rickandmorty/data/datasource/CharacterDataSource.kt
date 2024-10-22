@@ -36,4 +36,28 @@ class CharacterDataSource(private val characterDao: CharacterDao) {
         // Return the complete list of characters.
         return@withContext allCharacters
     }
+
+    /**
+     * Fetches characters based on the given filters.
+     * This method is used for searching and filtering characters.
+     *
+     * @param name The name of the character to filter by (optional).
+     * @param status The status of the character to filter by (optional).
+     * @return List<Character> A list of filtered characters.
+     */
+    suspend fun getFilteredCharacters(name: String?, status: String?): List<Character> = withContext(Dispatchers.IO) {
+        val response = characterDao.getFilteredCharacters(name, status) // Fetch filtered characters.
+        return@withContext response.results
+    }
+
+    /**
+     * Fetches a character by its ID.
+     * This method is used for retrieving a specific character by its unique ID.
+     *
+     * @param id The ID of the character to retrieve.
+     * @return Character The character data for the given ID.
+     */
+    suspend fun getCharacterById(id: Int): Character = withContext(Dispatchers.IO) {
+        return@withContext characterDao.getCharacterById(id) // Fetch character by ID.
+    }
 }

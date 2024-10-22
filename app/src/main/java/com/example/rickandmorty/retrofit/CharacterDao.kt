@@ -1,7 +1,9 @@
 package com.example.rickandmorty.retrofit
 
+import com.example.rickandmorty.data.entity.Character
 import com.example.rickandmorty.data.entity.CharacterResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 /**
@@ -24,4 +26,25 @@ interface CharacterDao {
      */
     @GET("character")
     suspend fun getAllCharacters(@Query("page") page: Int): CharacterResponse
+
+    /**
+     * Fetches a filtered list of characters based on name and status.
+     * This method allows searching and filtering characters.
+     *
+     * @param name The name of the character to filter by.
+     * @param status The status of the character to filter by (e.g., "alive").
+     * @return CharacterResponse The response containing filtered character data.
+     */
+    @GET("character")
+    suspend fun getFilteredCharacters(@Query("name") name: String?, @Query("status") status: String?): CharacterResponse
+
+    /**
+     * Fetches a character by its ID.
+     * This method allows retrieving a specific character by its unique ID.
+     *
+     * @param id The ID of the character to retrieve.
+     * @return Character The character data for the given ID.
+     */
+    @GET("character/{id}")
+    suspend fun getCharacterById(@Path("id") id: Int): Character
 }
