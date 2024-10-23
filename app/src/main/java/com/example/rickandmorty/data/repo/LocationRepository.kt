@@ -19,4 +19,24 @@ class LocationRepository(private val lds: LocationDataSource) {
      * @return List<Location> A list of all locations retrieved from the data source.
      */
     suspend fun getAllLocations(): List<Location> = lds.getAllLocations()
+
+    /**
+     * Fetches a single location by its ID from the data source.
+     * This method calls the LocationDataSource to retrieve a specific location by its ID.
+     *
+     * @param id The ID of the location to retrieve.
+     * @return Location The location data for the given ID.
+     */
+    suspend fun getLocationById(id: Int): Location = lds.getLocationById(id)
+
+    /**
+     * Filters locations based on provided query parameters.
+     * This method calls the LocationDataSource to filter locations by name, type, or dimension.
+     *
+     * @param name (Optional) The name of the location to filter by.
+     * @param type (Optional) The type of the location to filter by.
+     * @param dimension (Optional) The dimension of the location to filter by.
+     * @return List<Location> A list of locations that match the provided filter criteria.
+     */
+    suspend fun filterLocations(name: String?, type: String?, dimension: String?): List<Location> = lds.filterLocations(name, type, dimension)
 }

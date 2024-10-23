@@ -36,4 +36,29 @@ class LocationDataSource(private val locationDao: LocationDao) {
         // Return the complete list of locations.
         return@withContext allLocations
     }
+
+    /**
+     * Fetches a single location by its ID from the API.
+     * The method runs in the IO coroutine dispatcher to perform network operations asynchronously.
+     *
+     * @param id The ID of the location to retrieve.
+     * @return Location The location data for the specified ID.
+     */
+    suspend fun getLocationById(id: Int): Location = withContext(Dispatchers.IO) {
+        return@withContext locationDao.getLocationById(id) // Fetch location by ID from the API.
+    }
+
+    /**
+     * Filters locations based on the specified query parameters such as name, type, or dimension.
+     * The method runs in the IO coroutine dispatcher to perform network operations asynchronously.
+     *
+     * @param name (Optional) The name of the location to filter by.
+     * @param type (Optional) The type of the location to filter by.
+     * @param dimension (Optional) The dimension of the location to filter by.
+     * @return List<Location> A list of filtered locations based on the provided parameters.
+     */
+    suspend fun filterLocations(name: String?, type: String?, dimension: String?): List<Location> = withContext(Dispatchers.IO) {
+        val response = locationDao.filterLocations(name, type, dimension) // Fetch filtered locations from the API.
+        return@withContext response.results // Return the filtered results.
+    }
 }
