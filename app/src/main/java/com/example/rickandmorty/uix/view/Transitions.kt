@@ -7,6 +7,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.rickandmorty.uix.viewmodel.CharacterDetailViewModel
+import com.example.rickandmorty.uix.viewmodel.EpisodeDetailViewModel
 import com.example.rickandmorty.uix.viewmodel.EpisodeViewModel
 import com.example.rickandmorty.uix.viewmodel.HomeViewModel
 import com.example.rickandmorty.uix.viewmodel.LocationViewModel
@@ -16,7 +17,8 @@ fun Transitions(
     homeViewModel: HomeViewModel,
     episodeViewModel: EpisodeViewModel,
     locationViewModel: LocationViewModel,
-    characterDetailViewModel: CharacterDetailViewModel
+    characterDetailViewModel: CharacterDetailViewModel,
+    episodeDetailViewModel: EpisodeDetailViewModel
 ){
     val navController = rememberNavController()
     // NavHost, hangi ekranın gösterileceğini kontrol eder
@@ -43,6 +45,16 @@ fun Transitions(
         ){
             val characterId = it.arguments?.getString("characterId")
             CharacterDetailScreen(characterDetailViewModel, navController, characterId.toString())
+        }
+        composable("EpisodeDetailScreen/{episodeId}",
+            arguments = listOf(
+                navArgument("episodeId"){
+                    type = NavType.StringType
+                }
+            )
+        ){
+            val episodeId = it.arguments?.getString("episodeId")
+            EpisodeDetailScreen(episodeDetailViewModel, navController, episodeId.toString())
         }
 
     }

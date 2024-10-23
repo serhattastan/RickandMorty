@@ -36,4 +36,39 @@ class EpisodeDataSource(private val episodeDao: EpisodeDao) {
         // Return the complete list of episodes.
         return@withContext allEpisodes
     }
+
+    /**
+     * Fetches a single episode by its ID from the API.
+     * The method runs in the IO coroutine dispatcher to perform network operations.
+     *
+     * @param id The ID of the episode to retrieve.
+     * @return Episode The episode retrieved from the API.
+     */
+    suspend fun getEpisodeById(id: Int): Episode = withContext(Dispatchers.IO) {
+        return@withContext episodeDao.getEpisodeById(id)
+    }
+
+    /**
+     * Fetches multiple episodes by their IDs from the API.
+     * The method runs in the IO coroutine dispatcher to perform network operations.
+     *
+     * @param ids A comma-separated list of episode IDs to retrieve.
+     * @return List<Episode> The list of episodes retrieved from the API.
+     */
+    suspend fun getEpisodesByIds(ids: String): List<Episode> = withContext(Dispatchers.IO) {
+        return@withContext episodeDao.getEpisodesByIds(ids)
+    }
+
+    /**
+     * Filters episodes based on name or episode code.
+     * The method runs in the IO coroutine dispatcher to perform network operations.
+     *
+     * @param name The name of the episode to filter by (optional).
+     * @param episode The code of the episode to filter by (optional).
+     * @return List<Episode> A list of filtered episodes retrieved from the API.
+     */
+    suspend fun filterEpisodes(name: String? = null, episode: String? = null): List<Episode> = withContext(Dispatchers.IO) {
+        val response = episodeDao.filterEpisodes(name, episode)
+        return@withContext response.results
+    }
 }

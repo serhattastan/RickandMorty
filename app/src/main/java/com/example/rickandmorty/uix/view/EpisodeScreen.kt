@@ -3,6 +3,7 @@ package com.example.rickandmorty.uix.view
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -63,7 +64,7 @@ fun EpisodeScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(episodeList) { episode ->
-                    EpisodeCard(episode = episode, navController = navController) // Display each episode as a card
+                    EpisodeCard(episode = episode, navController = navController){navController.navigate("EpisodeDetailScreen/${episode.id}")} // Display each episode as a card
                 }
             }
         }
@@ -78,7 +79,7 @@ fun EpisodeScreen(
  * @param navController NavController used to navigate to the episode detail screen.
  */
 @Composable
-fun EpisodeCard(episode: Episode, navController: NavController) {
+fun EpisodeCard(episode: Episode, navController: NavController, onClick: () -> Unit) {
     val coroutineScope = rememberCoroutineScope()
     val animatedOffsetX = remember { Animatable(0f) }
     val maxDragOffset = 0.25f * 1080f // Assuming screen width is 1080 pixels, allowing drag up to 25% of the screen width
@@ -88,6 +89,7 @@ fun EpisodeCard(episode: Episode, navController: NavController) {
             .fillMaxWidth()
             .padding(8.dp)
             .graphicsLayer { translationX = animatedOffsetX.value } // Apply horizontal drag offset
+            .clickable{ onClick() }
             .pointerInput(Unit) {
                 // Detect horizontal drag gestures
                 detectHorizontalDragGestures(
