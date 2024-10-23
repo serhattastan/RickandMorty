@@ -98,7 +98,7 @@ fun LocationCard(location: Location, navController: NavController) {
                         coroutineScope.launch {
                             // If the drag is far enough, navigate to the location detail screen
                             if (abs(animatedOffsetX.value) > maxDragOffset * 0.75f) {
-                                navController.navigate("locationDetail/${location.id}")
+                                navController.navigate("LocationDetailScreen/${location.id}")
                             }
                             // Animate the card back to its original position
                             animatedOffsetX.animateTo(0f, animationSpec = tween(500))

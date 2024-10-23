@@ -3,16 +3,33 @@ package com.example.rickandmorty.uix.view
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -64,7 +81,7 @@ fun EpisodeScreen(
                 modifier = Modifier.fillMaxSize()
             ) {
                 items(episodeList) { episode ->
-                    EpisodeCard(episode = episode, navController = navController){navController.navigate("EpisodeDetailScreen/${episode.id}")} // Display each episode as a card
+                    EpisodeCard(episode = episode, navController = navController) // Display each episode as a card
                 }
             }
         }
@@ -79,7 +96,7 @@ fun EpisodeScreen(
  * @param navController NavController used to navigate to the episode detail screen.
  */
 @Composable
-fun EpisodeCard(episode: Episode, navController: NavController, onClick: () -> Unit) {
+fun EpisodeCard(episode: Episode, navController: NavController) {
     val coroutineScope = rememberCoroutineScope()
     val animatedOffsetX = remember { Animatable(0f) }
     val maxDragOffset = 0.25f * 1080f // Assuming screen width is 1080 pixels, allowing drag up to 25% of the screen width
@@ -89,7 +106,6 @@ fun EpisodeCard(episode: Episode, navController: NavController, onClick: () -> U
             .fillMaxWidth()
             .padding(8.dp)
             .graphicsLayer { translationX = animatedOffsetX.value } // Apply horizontal drag offset
-            .clickable{ onClick() }
             .pointerInput(Unit) {
                 // Detect horizontal drag gestures
                 detectHorizontalDragGestures(
@@ -97,7 +113,7 @@ fun EpisodeCard(episode: Episode, navController: NavController, onClick: () -> U
                         coroutineScope.launch {
                             // If the drag is far enough, navigate to the episode detail screen
                             if (abs(animatedOffsetX.value) > maxDragOffset * 0.75f) {
-                                navController.navigate("episodeDetail/${episode.id}")
+                                navController.navigate("EpisodeDetailScreen/${episode.id}")
                             }
                             // Animate the card back to its original position
                             animatedOffsetX.animateTo(0f, animationSpec = tween(500))

@@ -10,6 +10,7 @@ import com.example.rickandmorty.uix.viewmodel.CharacterDetailViewModel
 import com.example.rickandmorty.uix.viewmodel.EpisodeDetailViewModel
 import com.example.rickandmorty.uix.viewmodel.EpisodeViewModel
 import com.example.rickandmorty.uix.viewmodel.HomeViewModel
+import com.example.rickandmorty.uix.viewmodel.LocationDetailViewModel
 import com.example.rickandmorty.uix.viewmodel.LocationViewModel
 
 @Composable
@@ -18,7 +19,8 @@ fun Transitions(
     episodeViewModel: EpisodeViewModel,
     locationViewModel: LocationViewModel,
     characterDetailViewModel: CharacterDetailViewModel,
-    episodeDetailViewModel: EpisodeDetailViewModel
+    episodeDetailViewModel: EpisodeDetailViewModel,
+    locationDetailViewModel: LocationDetailViewModel
 ){
     val navController = rememberNavController()
     // NavHost, hangi ekranın gösterileceğini kontrol eder
@@ -55,6 +57,16 @@ fun Transitions(
         ){
             val episodeId = it.arguments?.getString("episodeId")
             EpisodeDetailScreen(episodeDetailViewModel, navController, episodeId.toString())
+        }
+        composable("LocationDetailScreen/{locationId}",
+            arguments = listOf(
+                navArgument("locationId"){
+                    type = NavType.StringType
+                }
+            )
+        ){
+            val locationId = it.arguments?.getString("locationId")
+            LocationDetailScreen(locationDetailViewModel, navController, locationId.toString())
         }
 
     }
