@@ -4,32 +4,16 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectHorizontalDragGestures
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -44,7 +28,8 @@ import kotlinx.coroutines.launch
 import kotlin.math.abs
 
 /**
- * Displays the list of episodes in a scrollable LazyColumn and handles the UI for episode navigation.
+ * Displays the list of episodes in a scrollable LazyColumn.
+ * The UI supports searching episodes and navigating to episode details by dragging the episode card.
  *
  * @param viewModel The ViewModel responsible for providing the episode data.
  * @param navController NavController used to navigate to other screens (e.g., episode details).
@@ -55,16 +40,52 @@ fun EpisodeScreen(
     viewModel: EpisodeViewModel,
     navController: NavController
 ) {
-    // Observing the list of episodes from the ViewModel
-    val episodeList by viewModel.episodeList.observeAsState(emptyList())
+    // State for handling the search bar visibility and text input
+    val isSearching = remember { mutableStateOf(false) }
+    val searchText = remember { mutableStateOf("") }
+    val episodeList by viewModel.filteredEpisodeList.observeAsState(emptyList()) // List of filtered episodes
 
-    // Scaffold provides the basic structure of the screen, including the top and bottom bars
     Scaffold(
         topBar = {
-            // Displays the top bar with a title
             TopAppBar(
-                title = { Text(text = "Rick and Morty Episodes", color = Color(0xFF1F8A70)) },
-                modifier = Modifier.fillMaxWidth(),
+                title = {
+                    // Toggle between the search bar and the title
+                    if (isSearching.value) {
+                        TextField(
+                            value = searchText.value,
+                            onValueChange = {
+                                searchText.value = it
+                                viewModel.filterEpisodes(it) // Filter episodes based on search text
+                            },
+                            label = { Text(text = "Search") },
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.White,
+                                unfocusedIndicatorColor = Color.White,
+                                focusedLabelColor = Color.White,
+                                unfocusedLabelColor = Color.White,
+                            )
+                        )
+                    } else {
+                        Text(text = "Rick and Morty Episodes", color = Color(0xFF1F8A70))
+                    }
+                },
+                actions = {
+                    // Search button toggles the search bar visibility
+                    IconButton(onClick = {
+                        isSearching.value = !isSearching.value
+                        if (!isSearching.value) {
+                            searchText.value = ""
+                            viewModel.filterEpisodes("") // Reset search when exiting search mode
+                        }
+                    }) {
+                        Icon(
+                            imageVector = if (isSearching.value) Icons.Filled.Close else Icons.Filled.Search,
+                            contentDescription = null,
+                            tint = Color(0xFF1F8A70)
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF202329))
             )
         },
@@ -76,7 +97,7 @@ fun EpisodeScreen(
                 .background(Color(0xFF121212))
                 .fillMaxSize()
         ) {
-            // LazyColumn to display a scrollable list of episodes
+            // LazyColumn to display the list of episodes
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
@@ -105,9 +126,9 @@ fun EpisodeCard(episode: Episode, navController: NavController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(8.dp)
-            .graphicsLayer { translationX = animatedOffsetX.value } // Apply horizontal drag offset
+            .graphicsLayer { translationX = animatedOffsetX.value } // Apply horizontal drag offset to the card
             .pointerInput(Unit) {
-                // Detect horizontal drag gestures
+                // Detect horizontal drag gestures for swiping
                 detectHorizontalDragGestures(
                     onDragEnd = {
                         coroutineScope.launch {
