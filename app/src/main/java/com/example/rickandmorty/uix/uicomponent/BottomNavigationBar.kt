@@ -68,8 +68,8 @@ fun BottomNavigationBar(navController: NavController, currentScreen: String) {
         NavigationBarItem(
             icon = { Icon(Icons.Default.Settings, contentDescription = "Settings") }, // Settings icon
             label = { Text("Settings") }, // Text label for the navigation item
-            selected = currentScreen == "settings", // Marks this item as selected if the current screen matches
-            onClick = { navController.navigate("settings") }, // Navigates to Settings screen when clicked
+            selected = currentScreen == "SettingScreen", // Marks this item as selected if the current screen matches
+            onClick = { navController.navigate("SettingScreen") }, // Navigates to Settings screen when clicked
             colors = NavigationBarItemDefaults.colors(
                 selectedIconColor = Color(0xFF4CAF50), // Green color when selected
                 selectedTextColor = Color(0xFF4CAF50), // Green text when selected

@@ -14,6 +14,7 @@ import com.example.rickandmorty.uix.viewmodel.EpisodeViewModel
 import com.example.rickandmorty.uix.viewmodel.HomeViewModel
 import com.example.rickandmorty.uix.viewmodel.LocationDetailViewModel
 import com.example.rickandmorty.uix.viewmodel.LocationViewModel
+import com.example.rickandmorty.uix.viewmodel.SettingViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,13 +25,14 @@ class MainActivity : ComponentActivity() {
     val characterDetailViewModel: CharacterDetailViewModel by viewModels()
     val episodeDetailViewModel: EpisodeDetailViewModel by viewModels()
     val locationDetailViewModel: LocationDetailViewModel by viewModels()
+    val settingViewModel: SettingViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             RickAndMortyTheme {
-                Transitions(homeViewModel, episodeViewModel, locationViewModel, characterDetailViewModel, episodeDetailViewModel, locationDetailViewModel)
+                Transitions(homeViewModel, episodeViewModel, locationViewModel, characterDetailViewModel, episodeDetailViewModel, locationDetailViewModel, settingViewModel)
             }
         }
     }

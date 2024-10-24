@@ -12,6 +12,7 @@ import com.example.rickandmorty.uix.viewmodel.EpisodeViewModel
 import com.example.rickandmorty.uix.viewmodel.HomeViewModel
 import com.example.rickandmorty.uix.viewmodel.LocationDetailViewModel
 import com.example.rickandmorty.uix.viewmodel.LocationViewModel
+import com.example.rickandmorty.uix.viewmodel.SettingViewModel
 
 @Composable
 fun Transitions(
@@ -20,7 +21,8 @@ fun Transitions(
     locationViewModel: LocationViewModel,
     characterDetailViewModel: CharacterDetailViewModel,
     episodeDetailViewModel: EpisodeDetailViewModel,
-    locationDetailViewModel: LocationDetailViewModel
+    locationDetailViewModel: LocationDetailViewModel,
+    settingViewModel: SettingViewModel
 ){
     val navController = rememberNavController()
     // NavHost, hangi ekranın gösterileceğini kontrol eder
@@ -37,6 +39,9 @@ fun Transitions(
         }
         composable("LocationScreen"){
             LocationScreen(locationViewModel, navController)
+        }
+        composable("SettingScreen"){
+            SettingScreen(settingViewModel, navController)
         }
         composable("CharacterDetailScreen/{characterId}",
             arguments = listOf(
