@@ -9,6 +9,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowForward
+import androidx.compose.material.icons.filled.Close
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
@@ -38,35 +40,69 @@ fun LocationScreen(
     viewModel: LocationViewModel,
     navController: NavController
 ) {
-    // Observing the list of locations from the ViewModel
-    val locationList by viewModel.locationList.observeAsState(emptyList())
+    // State for handling the search bar visibility and text input
+    val isSearching = remember { mutableStateOf(false) }
+    val searchText = remember { mutableStateOf("") }
+    val locationList by viewModel.filteredLocationList.observeAsState(emptyList()) // List of filtered locations
 
-    // Scaffold provides the structure of the screen, including the top bar and bottom navigation bar
     Scaffold(
         topBar = {
-            // Displays the top app bar with the title
             TopAppBar(
-                title = { Text(text = "Rick and Morty Locations", color = Color(0xFF1F8A70)) },
-                modifier = Modifier.fillMaxWidth(),
+                title = {
+                    // Toggle between the search bar and the title
+                    if (isSearching.value) {
+                        TextField(
+                            value = searchText.value,
+                            onValueChange = {
+                                searchText.value = it
+                                viewModel.filterLocations(it) // Filter locations based on search text
+                            },
+                            label = { Text(text = "Search") },
+                            colors = TextFieldDefaults.textFieldColors(
+                                containerColor = Color.Transparent,
+                                focusedIndicatorColor = Color.White,
+                                unfocusedIndicatorColor = Color.White,
+                                focusedLabelColor = Color.White,
+                                unfocusedLabelColor = Color.White,
+                            )
+                        )
+                    } else {
+                        Text(text = "Rick and Morty Locations", color = Color(0xFF1F8A70))
+                    }
+                },
+                actions = {
+                    // Search button toggles the search bar visibility
+                    IconButton(onClick = {
+                        isSearching.value = !isSearching.value
+                        if (!isSearching.value) {
+                            searchText.value = ""
+                            viewModel.filterLocations("") // Reset search when exiting search mode
+                        }
+                    }) {
+                        Icon(
+                            imageVector = if (isSearching.value) Icons.Filled.Close else Icons.Filled.Search,
+                            contentDescription = null,
+                            tint = Color(0xFF1F8A70)
+                        )
+                    }
+                },
                 colors = TopAppBarDefaults.topAppBarColors(containerColor = Color(0xFF202329))
             )
         },
         bottomBar = { BottomNavigationBar(navController = navController, currentScreen = "LocationScreen") }
     ) { paddingValues ->
-        // Column layout to arrange content vertically
         Column(
             modifier = Modifier
                 .padding(paddingValues)
                 .background(Color(0xFF121212))
                 .fillMaxSize()
         ) {
-            // LazyColumn to display the list of locations in a scrollable format
+            // LazyColumn to display the list of locations
             LazyColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
-                // Display each location using LocationCard
                 items(locationList) { location ->
-                    LocationCard(location = location, navController = navController)
+                    LocationCard(location = location, navController = navController) // Display each location as a card
                 }
             }
         }
